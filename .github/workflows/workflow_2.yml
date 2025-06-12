@@ -25,6 +25,12 @@ jobs:
       - name: 🛠️ Build Vite React App
         run: npm run build
 
+      - name: 📦 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+
   test:
     runs-on: ubuntu-latest
     needs: build
@@ -53,7 +59,7 @@ jobs:
       - name: 📤 Deploy to Netlify
         uses: nwtgck/actions-netlify@v2
         with:
-          publish-dir: "./dist"
+          publish-dir: "./build"
           production-deploy: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
