@@ -56,5 +56,5 @@ jobs:
           publish-dir: "./dist"
           production-deploy: true
         env:
-          NETLIFY_AUTH_TOKEN: ${{ nfp_LBSKiJN1Mi1xEYZhdu8HgEZxXYiUZKtgb9be }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
