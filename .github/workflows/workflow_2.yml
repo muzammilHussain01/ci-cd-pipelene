@@ -3,6 +3,8 @@ name: Vite React CI/CD Pipeline with needs
 on:
   push:
     branches: [main]
+    path-ignore:
+      - ".github/workflows/**"
   pull_request:
     branches: [main]
   workflow_dispatch:
