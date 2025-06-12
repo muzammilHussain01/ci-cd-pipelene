@@ -1,0 +1,60 @@
+name: Vite React CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🛠️ Build Vite React App
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🧪 Run Tests
+        run: npm test --if-present
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📤 Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: "./dist"
+          production-deploy: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ nfp_LBSKiJN1Mi1xEYZhdu8HgEZxXYiUZKtgb9be }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
