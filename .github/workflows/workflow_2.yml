@@ -1,4 +1,4 @@
-name: Vite React CI/CD Pipeline with needs
+name: Vite React CI/CD Pipeline with needs test
 
 on:
   push:
