@@ -1,0 +1,105 @@
+#--------->>>>>>> Defining the flow name
+name: Vite React CI/CD Pipeline with needs test
+
+#---------->>>>> Defining the "ON" condetion
+on:
+  push:
+    branches: [main]
+    path-ignore:
+      - '.github/workflows'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+#---------->>>>> Defining the "JOBS"
+jobs:
+  # Making the build process
+  build:
+    runs-on: ubuntu-latest # Defining the "OS"
+    steps: # Steps to make the build folder
+      #------- Checkout process ----------
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      #------- Checkout process ----------
+
+      #------- Setting up node version ----------
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      #------- Setting up node version ----------
+
+      #------- Installing Dependencies ----------
+      - name: 📦 Install Dependencies
+        run: npm install
+      #------- Installing Dependencies ----------
+
+      #------- Making Build Vite React App ----------
+      - name: 🛠️ Build Vite React App
+        run: npm run build
+      #------- Making Build Vite React App ----------
+
+      #------- Uploading build artifacts ----------
+      - name: 📦 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+      #------- Uploading build artifacts ----------
+
+
+  test: # Test job
+    runs-on: ubuntu-latest # Defining the "OS"
+    needs: build # it needs build job to be completed to perform test
+    steps:
+      #------- Checkout process ----------
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      #------- Checkout process ----------
+
+      #------- Setting up node version ----------
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      #------- Setting up node version ----------
+
+      #------- Installing Dependencies ----------
+      - name: 📦 Install Dependencies
+        run: npm install
+      #------- Installing Dependencies ----------
+
+      #------- Run Tests ----------
+      - name: 🧪 Run Tests
+        run: npm test --if-present
+      #------- Run Tests ----------
+
+  deploy: # Deploy job
+    runs-on: ubuntu-latest # Defining the "OS"
+    needs: test # it needs test job to be completed to perform deployment
+    steps:
+      #------- Checkout process ----------
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      #------- Checkout process ----------
+
+      #------- Download build artifacts ----------
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+      #------- Download build artifacts ----------
+
+      #------- Deploy to Netlify ----------
+      - name: 📤 Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: "./dist"
+          production-deploy: true
+        #------- Deploy to Netlify ----------
+
+
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
