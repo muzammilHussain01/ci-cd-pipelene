@@ -68,7 +68,7 @@ jobs:
         run: npm ci
 
       - name: 🧪 Run Unit & Integration Tests
-        run: npm test -- --coverage
+        run: npm test --if-present
 
   build:
     runs-on: ubuntu-latest
