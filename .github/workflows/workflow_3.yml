@@ -2,9 +2,9 @@ name: Test-3 ci/cd pipeline
 
 on:
   push:
-  branches: [main, workflow_dispatch]
-  path-ignore:
-    - "./github/workflows"
+    branches: [main, workflow_dispatch]
+    path-ignore:
+      - "./github/workflows"
   pull_request:
     branches: [main]
 
@@ -50,9 +50,6 @@ jobs:
 
       - name: Run test
         run: npm test --if--present
-
-
-
 
   deploy:
     runs-on: ubuntu-latest
