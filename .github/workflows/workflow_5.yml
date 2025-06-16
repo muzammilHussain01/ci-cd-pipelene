@@ -1,4 +1,4 @@
-name: ci/cd pipeline workflow-5
+name: ci-cd pipeline workflow-5
 
 on:
   push:
