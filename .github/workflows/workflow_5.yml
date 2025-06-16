@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-     - ".github/workflows"
+      - ".github/workflows"
   pull_request:
     branches:
       - main
@@ -15,5 +15,16 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: setup configuration
+      - name: Setup Configuration
         run: echo "Setting up configuration"
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setting Up Node Version
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
