@@ -11,12 +11,9 @@ on:
       - main
   workflow_dispatch:
 
-#Jobs
 jobs:
   setup:
-    runs-on:
-      - ubuntu-latest
-      - windows-latest
+    runs-on: ubuntu-latest
     steps:
-     - name: setup configuration
-       run: echo "Setting up configuration"
+      - name: setup configuration
+        run: echo "Setting up configuration"
