@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: Setup Configuration
         run: echo "Setting up configuration"
+
   setup-notify:
     runs-on: ubuntu-latest
     needs: setup
@@ -28,6 +29,7 @@ jobs:
           else
             echo "Dependencies missing"
           fi
+
 
   test:
     runs-on: ubuntu-latest
@@ -77,4 +79,52 @@ jobs:
         - name: Upload Conformation
           run: echo "Upload build completed"
 
+  build-notify:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Setup Success notification
+        run: |
+          if [ -d "dist" ]; then
+            echo "Build completed successfully"
+          else
+            echo "Build failed: 'dist' folder not found"
+          fi
 
+
+
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Node -v setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm
+
+      - name: Download build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: .dist
+
+      - name: Install netlify cli
+        run: npm install -g netlify-cli
+
+      - name: Deploy to netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{secrets.NETLIFY_AUTH_TOKEN}}
+          NETLIFY_SITE_ID: ${{secrets.NETLIFY_SITE_ID}}
+        run: |
+             netlify deploy --dir=./dist --site=$NETLIFY_SITE_ID --prod
+
+      - name: Deployment done
+        run: echo "✅ Deployment to Netlify completed!"
