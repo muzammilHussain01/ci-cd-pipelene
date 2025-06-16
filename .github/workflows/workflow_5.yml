@@ -1,0 +1,23 @@
+name: ci/cd pipeline workflow-5
+
+on:
+  name: On Conditions
+  push:
+    branches:
+      - main
+  paths-ignore:
+    - ".github/workflows"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+#Jobs
+jobs:
+  setup:
+    runs-on:
+      - ubuntu-latest
+      - windows-latest
+    steps:
+     - name: setup configuration
+       run: echo "Setting up configuration"
