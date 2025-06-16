@@ -1,7 +1,6 @@
 name: ci/cd pipeline workflow-5
 
 on:
-  name: On Conditions
   push:
     branches:
       - main
