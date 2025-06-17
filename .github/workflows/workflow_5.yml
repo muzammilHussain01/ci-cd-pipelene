@@ -199,6 +199,7 @@ jobs:
 
   email-notify:
       runs-on: ubuntu-latest
+      needs: [build-notify]
       steps:
           - uses: danthe1st/email-filechange-notif-action@v1
             with:
