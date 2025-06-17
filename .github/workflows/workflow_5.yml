@@ -199,7 +199,7 @@ jobs:
 
   email-notify:
       runs-on: ubuntu-latest
-      needs: [build-notify]
+      needs: [deploy]
       steps:
           - uses: danthe1st/email-filechange-notif-action@v1
             with:
@@ -210,11 +210,11 @@ jobs:
               # A file in the repository or HTTP address that contains file patterns with E-Mail addresses that should be notified on file changes
               mailingList: ${{ secrets.MAILING_LIST }}
               # The SMTP server used to send E-Mails
-              smtpServer: ${{ secrets.SMTP_SERVER }}
+#              smtpServer: ${{ secrets.SMTP_SERVER }}
               # optional, The SMTP port used to send E-Mails
-              smtpPort: 587
+#              smtpPort: 587
               # The SMTP user name used to send E-Mails
-              smtpUsername: ${{ secrets.SMTP_USER }}
+#              smtpUsername: ${{ secrets.SMTP_USER }}
               # The SMTP password used to send E-Mails
-              smtpPassword: ${{ secrets.SMTP_PASSWORD }}
+#              smtpPassword: ${{ secrets.SMTP_PASSWORD }}
 
