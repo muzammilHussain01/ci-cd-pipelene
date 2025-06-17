@@ -106,7 +106,7 @@ jobs:
         - name: Cache npm dependencies
           uses: actions/cache@v4
           with:
-            path: ~./npm
+            path: ~/.npm
             key: ${{runner.os}}-node-${{hashFiles('package-lock.json')}}
             restore-keys: |
               ${{runner.os}}-node
@@ -187,8 +187,8 @@ jobs:
         run: echo "✅ Deployment to Netlify completed!"
 
   notify:
-    Name: Slack
-    needs: [ test, lint ] # We only check after the others jobs have run
+    name: Slack
+    needs: [build-notify] # We only check after the others jobs have run
     if: always() # Always runs even if one of the builds fails
     runs-on: ubuntu-latest
     steps:
@@ -196,3 +196,4 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
