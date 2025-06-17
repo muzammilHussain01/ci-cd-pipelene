@@ -90,6 +90,7 @@ jobs:
 
 
 
+
   build:
       runs-on: ubuntu-latest
       needs: test
@@ -184,3 +185,14 @@ jobs:
 
       - name: Deployment done
         run: echo "✅ Deployment to Netlify completed!"
+
+  notify:
+    Name: Slack
+    needs: [ test, lint ] # We only check after the others jobs have run
+    if: always() # Always runs even if one of the builds fails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iRoachie/slack-github-actions@v2.3.2
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
