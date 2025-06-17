@@ -29,7 +29,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
+      
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{runner.os}}-node-${{hashFiles('package-lock.json')}}
+          restore-keys: |
+            ${{runner.os}}-node
+      
       - name: Install Dependencies
         run: npm install
 
@@ -47,6 +55,7 @@ jobs:
           else
             echo "Dependencies missing"
           fi
+
 
 
   test:
@@ -68,6 +77,7 @@ jobs:
         run: |
          npm test
          echo "Test completed"
+
 
 
   build:
@@ -108,6 +118,7 @@ jobs:
           else
             echo "Build failed: 'dist' folder not found"
           fi
+
 
 
 
