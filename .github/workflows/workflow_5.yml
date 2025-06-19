@@ -218,3 +218,39 @@ jobs:
               # The SMTP password used to send E-Mails
               smtpPassword: ${{ secrets.SMTP_PASSWORD }}
 
+  github-relese:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup node version
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache the dependency
+        uses: actions/cache@v4
+        with:
+         path: ~/.npm
+         key: ${{runner.os}}-node-${{hashFiles('package-lock.json')}}
+         restore-keys:
+           ${{runner.os}}-node
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: create release with assests
+        if: ${{env.VERSION}}
+        continue-on-error: true
+        uses: phuonghuynh/action-ghrelease@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{env._GITHUB_PAT}}
+        with:
+          repository: phuonghuynh/testci3
+          commitish: main
+          tag_name: ${{env.RELEASE_TAG}}
+          name: Release ${{env.RELEASE_TAG}}
+          #          body: Auto release API ${{env.RELEASE_TAG}} by @ci
+          files: ${{env.TARBALL}}
+
