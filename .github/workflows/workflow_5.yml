@@ -243,13 +243,19 @@ jobs:
         run: npm install
 
       - name: Generate Changelog
-        run: echo "## 📦 Release notes for $GITHUB_REF_NAME" > CHANGELOG.md
+        run: |
+          echo "## 📦 Release: $GITHUB_REF_NAME" > release-notes.txt
+          echo "Changes:" >> release-notes.txt
+          echo "- New features added" >> release-notes.txt
+          echo "- Bug fixes" >> release-notes.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           body_path: CHANGELOG.md
-          files: ./dist/**
+          files: |
+           ./dist/**
+            release-notes.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
